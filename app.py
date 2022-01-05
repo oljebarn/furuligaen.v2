@@ -415,6 +415,8 @@ def index():
             tabell_df = pd.DataFrame(tabell)
             ny_tabell = tabell_df.rename(columns={0: "Total", 1: "GWLive", 2: "Round"})
             return ny_tabell
+        
+
 
         def getTabell():
             url2 = 'https://fantasy.premierleague.com/api/leagues-classic/173312/standings/'
@@ -427,6 +429,8 @@ def index():
             
             tabell.insert(0, 'Navn', league_df[['player_name']], True)
             tabell['entry'] = teamsList['entry']
+            
+            
 
             tabellSort = tabell.sort_values ('Round', ascending=False)
             tabellSort.insert(0, "#", range(1, len(tabell) + 1), True)
@@ -485,15 +489,56 @@ def index():
             return str(finished) + ' / ' + str(total)
 
         data = getTabell()
+        
+
         gwHead = gwHeader()
 
         data = data.to_dict(orient='records')
+        
+        #New stuff - arrows
+        def getLastRoundPoints (teamID):
+            url = 'https://fantasy.premierleague.com/api/entry/' + str(teamID) + '/history/'
+            r = requests.get(url).json()['current']
+            LastRoundPoints = r[thisGw - 1]['total_points'] - r[gws - 1]['total_points']
+            return LastRoundPoints
+        
+        def genereateLastPlacements():
+            url = 'https://fantasy.premierleague.com/api/leagues-classic/173312/standings/'
+            r = requests.get(url).json()['standings']['results']
+            lastStandings = []
+            for manager in r:
+                lastStandings.append((getLastRoundPoints(manager['entry']), manager['entry']))
+            lastStandings.sort(reverse=True)
+            
+            entrys = []
+            for x, y in lastStandings:
+                entrys.append(y)
+            return entrys
+        
+        lastPlacements = genereateLastPlacements()
+        
+        def upOrDown(teamID):
+            if thisGw == gws:
+                return "Line"
+            else:
+                hjelpeliste = []
+                for entries in data:
+                    hjelpeliste.append(entries['Entry'])
+                
+                lastGW = lastPlacements.index(teamID)
+                this = hjelpeliste.index(teamID)
+                if lastGW == this:
+                    return "Line"
+                elif lastGW > this:
+                    return "Down"
+                else:
+                    return "Up"
 
         def formatScore(score):
             return "{:,}".format(score)
         
         result = render_template('main_page.html', data=data, gwHead = gwHead, thisGw = thisGw, getChip = getChip, getCap = getCap,
-            countFinishedPlayers = countFinishedPlayers, formatScore = formatScore)
+            countFinishedPlayers = countFinishedPlayers, formatScore = formatScore, upOrDown = upOrDown)
         
         return result
     except:
@@ -1109,4 +1154,4 @@ def fixtures():
 
 if __name__ == '__main__':
     app.debug = True
-    app.run(host= '0.0.0.0', port = 5000)
+    app.run(host= '0.0.0.0', port = 4999)

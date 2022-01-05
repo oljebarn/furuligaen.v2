@@ -20,7 +20,15 @@
     </thead>
         {%for obj in data%}
         <tr>
-            <td>{{obj.Rank}}</td>
+            <td>{{obj.Rank}}<br>
+                {% if upOrDown(obj.Entry) == 'Line' %}
+                    <span class="badge bg-secondary">ᐊ</span>
+                {% elif upOrDown(obj.Entry) == 'Down' %}
+                    <span class="badge bg-danger">▼</span>
+                {% elif upOrDown(obj.Entry) == 'Up' %}
+                    <span class="badge bg-success">▲</span>
+                {% endif %}
+            </td>
             <td>
                 <a href="/{{obj.Entry}}">
                 <b>{{obj.Navn}}</b>
