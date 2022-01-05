@@ -519,7 +519,7 @@ def index():
         
         def upOrDown(teamID):
             if thisGw == gws:
-                return "Line"
+                return "Empty"
             else:
                 hjelpeliste = []
                 for entries in data:
