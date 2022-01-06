@@ -503,12 +503,10 @@ def index():
             return LastRoundPoints
         
         def genereateLastPlacements():
-            url = 'https://fantasy.premierleague.com/api/leagues-classic/173312/standings/'
-            r = requests.get(url).json()['standings']['results']
             lastStandings = []
-            for manager in r:
-                lastStandings.append((getLastRoundPoints(manager['entry']), manager['entry']))
-            lastStandings.sort(reverse=True)
+            for manager in data:
+                lastStandings.append((getLastRoundPoints(manager['Entry']), manager['Entry']))
+            lastStandings.sort(key=lambda y:y[0], reverse=True)
             
             entrys = []
             for x, y in lastStandings:
