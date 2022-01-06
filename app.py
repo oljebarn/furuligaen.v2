@@ -499,7 +499,7 @@ def index():
         def getLastRoundPoints (teamID):
             url = 'https://fantasy.premierleague.com/api/entry/' + str(teamID) + '/history/'
             r = requests.get(url).json()['current']
-            LastRoundPoints = r[thisGw - 1]['total_points'] - r[gws - 1]['total_points']
+            LastRoundPoints = r[thisGw - 2]['total_points'] - r[gws - 2]['total_points']
             return LastRoundPoints
         
         def genereateLastPlacements():
@@ -529,7 +529,7 @@ def index():
                 this = hjelpeliste.index(teamID)
                 if lastGW == this:
                     return "Line"
-                elif lastGW > this:
+                elif lastGW < this:
                     return "Down"
                 else:
                     return "Up"
