@@ -1,67 +1,59 @@
-{% extends "base.html" %}
-
-{% block title %} 
-    Furuligaen 
-{% endblock %}
-
-{% block route%}
-    "/"
-{% endblock %}
-
-{% block content %}
+{% extends "base.html" %} {% block title %} Furuligaen {% endblock %} {% block
+route%} "/" {% endblock %} {% block content %}
 <table class="sortable table table-dark table-borderless table-striped">
-    <thead>
-        <th>#</th>
-        <th>Manager</th>
-        <th class = "number">Tot</th>
-        <th class = "number">GW{{thisGw}}</th>
-        <th class = "number">{{gwHead}}</th>
-        
-    </thead>
-        {%for obj in data%}
-        <tr>
-            <td>{{obj.Rank}}<br>
-                {% if upOrDown(obj.Entry) == 'Line' %}
-                    <span class="badge bg-secondary">ᐊ</span>
-                {% elif upOrDown(obj.Entry) == 'Down' %}
-                    <span class="badge bg-danger">▼</span>
-                {% elif upOrDown(obj.Entry) == 'Up' %}
-                    <span class="badge bg-success">▲</span>
-                {% elif upOrDown(obj.Entry) == 'Empty' %}
-                {% endif %}
-            </td>
-            <td>
-                <a href="/{{obj.Entry}}">
-                <b>{{obj.Navn}}</b>
-                <br>
-                <span class="captain badge bg-warning text-dark">{{getCap(obj['Entry'])}}</span>
-                {% if getChip(obj['Entry']) == 'Bench Boost' %}
-                <span class="badge bg-danger">BB</span>
-                {% elif getChip(obj['Entry']) == 'Triple Cap' %}
-                <span class="badge bg-danger">TC</span>
-                {% elif getChip(obj['Entry']) == 'Free Hit' %}
-                <span class="badge bg-danger">FH</span>
-                {% elif getChip(obj['Entry']) == 'Wildcard' %}
-                <span class="badge bg-danger">WC</span>
-                {% endif %}
-                </a>
-            </td>
-        
-        
-            <td class = "number">{{obj.Tot}}</td>
-            <td class = "number">
-                {{obj.GW}} <br>
-                {% if countFinishedPlayers(obj.Entry) == "11 / 11" or countFinishedPlayers(obj.Entry) == "15 / 15" %}
-                    <span class="badge bg-danger">Done</span>
-                 {% else %}
-                    <span class="badge bg-warning text-dark">{{countFinishedPlayers(obj.Entry)}}</span>
-                {% endif %} 
-               
-            </td>
-            <td class = "number"><b>{{formatScore(obj.GWround)}}</b></td>
-            
-        </tr>
-        {% endfor %}
+  <thead>
+    <th>#</th>
+    <th>Manager</th>
+    <th class="number">Tot</th>
+    <th class="number">GW{{thisGw}}</th>
+    <th class="number">{{gwHead}}</th>
+  </thead>
+  {%for obj in data%}
+  <tr>
+    <td>
+      {{obj.Rank}}<br />
+      {% if upOrDown(obj.Entry) == 'Line' %}
+      <span class="badge bg-secondary">ᐊ</span>
+      {% elif upOrDown(obj.Entry) == 'Down' %}
+      <span class="badge bg-danger">▼</span>
+      {% elif upOrDown(obj.Entry) == 'Up' %}
+      <span class="badge bg-success">▲</span>
+      {% elif upOrDown(obj.Entry) == 'Empty' %} {% endif %}
+    </td>
+    <td>
+      <a href="/{{obj.Entry}}">
+        <b>{{obj['Navn']}}</b>
+        <br />
+        <span class="captain badge bg-warning text-dark"
+          >{{getCap(obj['Entry'])}}</span
+        >
+        {% if getChip(obj['Entry']) == 'Bench Boost' %}
+        <span class="badge bg-danger">BB</span>
+        {% elif getChip(obj['Entry']) == 'Triple Cap' %}
+        <span class="badge bg-danger">TC</span>
+        {% elif getChip(obj['Entry']) == 'Free Hit' %}
+        <span class="badge bg-danger">FH</span>
+        {% elif getChip(obj['Entry']) == 'Wildcard' %}
+        <span class="badge bg-danger">WC</span>
+        {% endif %}
+      </a>
+    </td>
+
+    <td class="number">{{obj.Tot}}</td>
+    <td class="number">
+      {{obj.GW}} <br />
+      {% if countFinishedPlayers(obj.Entry) == "11 / 11" or
+      countFinishedPlayers(obj.Entry) == "15 / 15" %}
+      <span class="badge bg-danger">Done</span>
+      {% else %}
+      <span class="badge bg-warning text-dark"
+        >{{countFinishedPlayers(obj.Entry)}}</span
+      >
+      {% endif %}
+    </td>
+    <td class="number"><b>{{obj.GWround}}</b></td>
+  </tr>
+  {% endfor %}
 </table>
 
 <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
