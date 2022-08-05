@@ -466,14 +466,11 @@ def index():
         league_df = pd.DataFrame(standings_df['results'].values.tolist())
 
         tabell = getTeamsPoints()
-        print(tabell)
-        print(league_df[['player_name']])
 
         #tabell.insert(0, 'Navn', league_df[['player_name']])
         tabell = tabell.assign(Navn=league_df[['player_name']])
-        print(tabell)
+
         tabell['entry'] = teamsList['entry']
-        print(tabell)
 
         tabellSort = tabell.sort_values('Round', ascending=False)
         tabellSort.insert(0, "#", range(1, len(tabell) + 1), True)
